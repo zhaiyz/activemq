@@ -18,24 +18,40 @@
     </bean>
     
     <!-- 发送消息的目的地（一个队列） -->
-    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+    <bean id="requestDestination" class="org.apache.activemq.command.ActiveMQQueue">
     	<!-- 设置消息队列的名字 -->
-    	<constructor-arg index="0" value="activeMQQueue" />
+    	<constructor-arg index="0" value="requestQueue" />
+    </bean>
+    
+    <!-- 应答消息的目的地（一个队列） -->
+    <bean id="replyDestination" class="org.apache.activemq.command.ActiveMQQueue">
+    	<!-- 设置消息队列的名字 -->
+    	<constructor-arg index="0" value="replyQueue" />
     </bean>
     
     <!-- 消息生产者 -->
     <bean id="producer" class="com.zhaiyz.activemq.Producer">
         <property name="jmsTemplate" ref="jmsTemplate" />
-        <property name="destination" ref="destination" />
+        <property name="requestDestination" ref="requestDestination" />
+        <property name="replyDestination" ref="replyDestination" />
     </bean>
     
     <!-- 消息消费者 -->
-    <bean id="consumer" class="com.zhaiyz.activemq.Consumer" />
+    <bean id="consumer" class="com.zhaiyz.activemq.Consumer">
+    	<property name="jmsTemplate" ref="jmsTemplate" />
+    </bean>
     
     <!-- 监听容器 -->
-    <bean id="jmsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">  
+    <bean id="jmsContainerRequest" class="org.springframework.jms.listener.DefaultMessageListenerContainer">  
        <property name="connectionFactory" ref="connectionFactory" />  
-       <property name="destination" ref="destination" />  
+       <property name="destination" ref="requestDestination" />  
        <property name="messageListener" ref="consumer" />  
-   </bean> 
+   </bean>
+   
+    <!-- 应答监听容器 -->
+    <bean id="jmsContainerReply" class="org.springframework.jms.listener.DefaultMessageListenerContainer">  
+       <property name="connectionFactory" ref="connectionFactory" />  
+       <property name="destination" ref="replyDestination" />  
+       <property name="messageListener" ref="producer" />  
+   </bean>
 </beans>
