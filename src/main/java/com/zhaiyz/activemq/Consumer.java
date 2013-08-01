@@ -42,14 +42,15 @@ public class Consumer implements MessageListener {
 		if (message instanceof TextMessage) {
 			TextMessage textMessage = (TextMessage) message;
 			try {
-				LOGGER.info(textMessage.getText());
+				final String request = textMessage.getText();
+				LOGGER.info(request);
 				Destination destination = textMessage.getJMSReplyTo();
 				final String jmsCorrelationID = textMessage.getJMSCorrelationID();
 				jmsTemplate.send(destination, new MessageCreator() {
 					
 					@Override
 					public Message createMessage(Session session) throws JMSException {
-						Message msg = session.createTextMessage("由消息消费者返回的信息");
+						Message msg = session.createTextMessage(request + "的应答！");
 						msg.setJMSCorrelationID(jmsCorrelationID);
 						return msg;
 					}

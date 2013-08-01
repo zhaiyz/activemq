@@ -2,6 +2,8 @@ package com.zhaiyz.activemq;
 
 import javax.annotation.Resource;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -39,7 +41,10 @@ public class ProducerTest {
 	 */
 	@Test
 	public void testSendMessage() {
-		producer.sendMessage("Hello, world!");
+		for (int i = 1; i < 10; i++) {
+			String request = "第" + i + "条信息";
+			Assert.assertEquals(request + "的应答！", producer.sendMessage(request));
+		}
 	}
 
 }
