@@ -4,6 +4,9 @@ import javax.annotation.Resource;
 
 import junit.framework.Assert;
 
+import net.sourceforge.groboutils.junit.v1.MultiThreadedTestRunner;
+import net.sourceforge.groboutils.junit.v1.TestRunnable;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,13 +41,29 @@ public class ProducerTest {
 	/**
 	 * Test method for
 	 * {@link com.zhaiyz.activemq.Producer#sendMessage(java.lang.String)}.
+	 * @throws Throwable 
 	 */
 	@Test
-	public void testSendMessage() {
-		for (int i = 1; i < 10; i++) {
-			String request = "第" + i + "条信息";
+	public void testSendMessage() throws Throwable {
+		
+		TestRunnable[] trs = new TestRunnable[10];
+		for (int i = 0; i < trs.length; i++) {
+			trs[i] = new SendMessageThread();
+		}
+		
+		MultiThreadedTestRunner mttr = new MultiThreadedTestRunner(trs);
+		mttr.runTestRunnables();
+		
+	}
+	
+	private class SendMessageThread extends TestRunnable {
+
+		@Override
+		public void runTest() throws Throwable {
+			String request = "第" + this.hashCode() + "条信息";
 			Assert.assertEquals(request + "的应答！", producer.sendMessage(request));
 		}
+		
 	}
 
 }

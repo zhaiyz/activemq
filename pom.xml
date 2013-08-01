@@ -46,6 +46,11 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.11</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.groboutils</groupId>
+			<artifactId>groboutils-core</artifactId>
+			<version>5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -63,4 +68,12 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>opensymphony-releases</id>
+			<name>Opensymphony Releases</name>
+			<url>https://oss.sonatype.org/content/repositories/opensymphony-releases</url>
+		</repository>
+	</repositories>
 </project>

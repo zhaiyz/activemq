@@ -94,7 +94,7 @@ public class Producer implements MessageListener {
 		});
 		
 		try {
-			boolean isReceiveMessage = replyMessage.getSemaphore().tryAcquire(10, TimeUnit.MILLISECONDS);
+			boolean isReceiveMessage = replyMessage.getSemaphore().tryAcquire(10, TimeUnit.SECONDS);
 			
 			ReplyMessage result = concurrentMap.get(correlationID);
 			
